@@ -21,3 +21,4 @@ echo "Running some commands..."
 sleep 1
 echo "Finished!"
 echo "checked" 
+echo "apply" 
