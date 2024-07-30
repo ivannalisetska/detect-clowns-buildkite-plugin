@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
+# Simulate BUILDKITE_MESSAGE being unset
+unset BUILDKITE_MESSAGE
+
 # Function to safely access BUILDKITE_MESSAGE
 get_buildkite_message() {
   if [ -z "${BUILDKITE_MESSAGE:-}" ]; then
@@ -20,4 +23,3 @@ echo "Commit message: ${commit_message}"
 echo "Running some commands..."
 sleep 1
 echo "Finished!"
-echo "checked" 
