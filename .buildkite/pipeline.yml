@@ -1,5 +1,5 @@
 steps:
   - commands:
     - "echo $BUILDKITE_BUILD_CHECKOUT_PATH"
-    - "sleep 15000"
+    - "sleep 45000"
 
