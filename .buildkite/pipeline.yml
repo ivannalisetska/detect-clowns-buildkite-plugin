@@ -1,90 +1,9 @@
 steps:
-  #   Multiline / trailing-space secret
-  - label: " Multiline secret"
-    commands: |
-      printf 'line1\nline2 ' > secret.txt
-      buildkite-agent redactor add secret.txt
-      echo -e "line1 line2"
-
-  #   Non-ASCII characters
-  - label: " Non-ASCII secret"
-    commands: |
-      echo 'pässw🔑rd' | buildkite-agent redactor add
-      echo 'pässw🔑rd appears here'
-
-  #   Regex-looking characters
-  - label: " Regex-y secret"
-    commands: |
-      echo 'a.*b?c' | buildkite-agent redactor add
-      echo 'a.*b?c a.*b?c'
-
-  # 4️  Long (≈2 KiB) secret – full round-trip
-  - label: " Long secret (2 KiB)"
-    commands: |
-      head -c 2048 </dev/urandom | base64 | tr -d '\n' > bigsecret.txt
-      buildkite-agent redactor add bigsecret.txt
-      cat bigsecret.txt
-
-  #   Overlapping secrets (prefix + full)
-  - label: " Overlapping secrets"
-    commands: |
-      echo 'abc'     | buildkite-agent redactor add
-      echo 'abcdef'  | buildkite-agent redactor add
-      echo 'abc abcdef'
-
-  #   Same secret repeated on one line
-  - label: " Repeated secret same line"
-    commands: |
-      echo 'spam' | buildkite-agent redactor add
-      echo 'spam spam spam'
-
-  #  Persistence across multiple commands
-  - label: " Persistence in step"
-    commands: |
-      echo 'staysecret' | buildkite-agent redactor add
-      echo 'staysecret first time'
-      echo 'staysecret second time'
-
-  #   Secret leaked from a “hook / plugin”-style script
-  - label: " Hook‐style output"
-    commands: |
-      echo 'hooksecret' | buildkite-agent redactor add
-      cat > plugin-script.sh <<'EOF'
-      #!/usr/bin/env bash
-      echo "Inside plugin hook: hooksecret"
-      EOF
-      chmod +x plugin-script.sh
-      ./plugin-script.sh
-
-  #   File with no trailing newline
-  - label: " No-newline file"
-    commands: |
-      printf 'nonewline' > nn.txt
-      buildkite-agent redactor add nn.txt
-      echo 'nonewline'
-
-  #   Mixed json / none formats
-  - label: " Mixed formats"
-    commands: |
-      echo '{"jsonkey":"jsonsecret"}' | buildkite-agent redactor add --format json
-      echo 'plainsecret' | buildkite-agent redactor add
-      echo 'jsonsecret plainsecret'
-
-# Binary file content (base64-encoded)
-  - label: ":eleven: Binary secret (base64)"
-    commands: |
-      # Grab a small binary (ls) and encode it as one long ASCII line
-      base64 -w0 "$(command -v ls)" > /tmp/ls.bin.b64   # -w0 == no line-wrap
-
-      # Register that base64 string as the secret
-      cat /tmp/ls.bin.b64 | buildkite-agent redactor add
-
-      # Echo it back verbatim — should redact
-      cat /tmp/ls.bin.b64
-
-  #   Parallelism: secret added in every shard
-  - label: "Parallel shards"
-    parallelism: 3
-    commands: |
-      echo 'parallelsecret' | buildkite-agent redactor add
-      echo "Shard ${BUILDKITE_PARALLEL_JOB}: parallelsecret"
+  - label: ":bug: Reproduce meta-data get issue"
+    commands:
+      - echo "BUILDKITE_JOB_ID=$BUILDKITE_JOB_ID"
+      - echo "BUILDKITE_AGENT_ACCESS_TOKEN=$BUILDKITE_AGENT_ACCESS_TOKEN"
+      - echo "Attempting buildkite-agent meta-data get directly:"
+      - buildkite-agent meta-data get test-key || echo "❌ direct call failed"
+      - echo "Attempting via subprocess:"
+      - python3 reproduce.py
