@@ -4,4 +4,4 @@ steps:
     commands:
       - echo "--- Starting trace"
       - export TRACE_ID=$(date +%s)
-      - /Users/ivannalisetska/buildevents step $BUILDKITE_BUILD_ID
+      - /Users/ivannalisetska/buildevents step $BUILDKITE_BUILD_ID $TRACE_ID install
