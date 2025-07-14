@@ -1,9 +1,7 @@
 steps:
-  - label: ":bug: Reproduce meta-data get issue"
+  - label: ":wave: Hello"
+    key: "hello-step"
     commands:
-      - echo "BUILDKITE_JOB_ID=$BUILDKITE_JOB_ID"
-      - echo "BUILDKITE_AGENT_ACCESS_TOKEN=$BUILDKITE_AGENT_ACCESS_TOKEN"
-      - echo "Attempting buildkite-agent meta-data get directly:"
-      - buildkite-agent meta-data get test-key || echo "❌ direct call failed"
-      - echo "Attempting via subprocess:"
-      - python3 reproduce.py
+      - echo "--- Starting trace"
+      - export TRACE_ID=$(date +%s)
+      - buildevents cmd $TRACE_ID "$BUILDKITE_JOB_ID" "hello-step" -- echo "This is a test step"
