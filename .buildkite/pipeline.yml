@@ -3,5 +3,6 @@ steps:
     key: "hello-step"
     commands:
       - echo "--- Starting trace"
+      - export STEP_ID="install-step"
       - export TRACE_ID=$(date +%s)
-      - /Users/ivannalisetska/buildevents step $BUILDKITE_BUILD_ID $STEP_ID $TRACE_ID "install"
+      - /Users/ivannalisetska/buildevents step "$BUILDKITE_BUILD_ID" "$STEP_ID" "$TRACE_ID" "install"
