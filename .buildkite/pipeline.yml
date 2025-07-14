@@ -4,4 +4,4 @@ steps:
     commands:
       - echo "--- Starting trace"
       - export TRACE_ID=$(date +%s)
-      - /Users/ivannalisetska/.buildevents cmd $TRACE_ID "$BUILDKITE_BUILD_ID" "hello-step" -- echo "This is a test step"
+      - /Users/ivannalisetska/buildevents cmd $TRACE_ID "$BUILDKITE_BUILD_ID" "hello-step" -- echo "This is a test step"
