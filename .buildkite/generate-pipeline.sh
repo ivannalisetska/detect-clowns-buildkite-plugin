@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-PIPELINE_FILE=$(mktemp /tmp/pipeline.XXXXXX.yml)
+PIPELINE_FILE=$(mktemp /tmp/pipeline.XXXXX.yml)
 
 echo "steps:" > "$PIPELINE_FILE"
 
