@@ -24,3 +24,4 @@ done < "$AFFECTED"
 
 cat "$PIPELINE_FILE"  # for debugging
 buildkite-agent pipeline upload "$PIPELINE_FILE"
+
