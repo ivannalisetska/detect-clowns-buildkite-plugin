@@ -6,4 +6,4 @@ steps:
 
   - label: ":gear: Generate dynamic pipeline"
     depends_on: "detect"
-    command: .buildkite/generate-dynamic.sh
+    command: .buildkite/generate-pipeline.sh
