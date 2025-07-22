@@ -1,11 +1,11 @@
 steps:
-  - label: ":detective: Detect affected"
-  key: "detect"
-  command: |
+ - label: ":detective: Detect affected"
+   key: "detect"
+   command: |
     echo "web-app" > affected.txt
-  artifact_paths:
+   artifact_paths:
     - affected.txt
 
-  - label: ":gear: Generate dynamic pipeline"
-    depends_on: "detect"
-    command: .buildkite/generate-pipeline.sh
+ - label: ":gear: Generate dynamic pipeline"
+   depends_on: "detect"
+   command: .buildkite/generate-pipeline.sh
