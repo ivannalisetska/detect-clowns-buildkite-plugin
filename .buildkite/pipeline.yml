@@ -1,9 +1,9 @@
 steps:
-  - label: ":bash: Decide pipelines to trigger"
-    key: "decision-step"
+  - label: ":detective: Detect affected projects"
+    key: "detect"
     command: |
-      echo "sandbox" > pipelines-to-trigger.txt
+      echo "web-app" > affected.txt
 
-  - label: ":buildkite: Upload dynamic steps"
-    depends_on: "decision-step"
-    command: .buildkite/generate-pipeline.sh
+  - label: ":gear: Generate dynamic pipeline"
+    depends_on: "detect"
+    command: .buildkite/generate-dynamic.sh
