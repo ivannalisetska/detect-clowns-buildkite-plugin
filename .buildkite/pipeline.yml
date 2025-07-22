@@ -1,10 +1,12 @@
+env:
+      AFFECTED_PROJECTS: "web-app api"
+
 steps:
   - label: ":detective: Detect changes"
     key: "detect"
     command: |
       export AFFECTED_PROJECTS="web-app api"
-    env:
-      AFFECTED_PROJECTS: "web-app api"
+    
 
   - label: ":gear: Generate dynamic pipeline"
     depends_on: "detect"
