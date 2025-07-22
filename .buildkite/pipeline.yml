@@ -1,11 +1,10 @@
 steps:
-  - label: ":detective: Detect affected"
+  - label: ":detective: Detect changes"
     key: "detect"
     command: |
       export AFFECTED_PROJECTS="web-app api"
-      buildkite-agent pipeline upload .buildkite/dynamic.yml
     env:
-      AFFECTED_PROJECTS: ""
+      AFFECTED_PROJECTS: "web-app api"
 
   - label: ":gear: Generate dynamic pipeline"
     depends_on: "detect"
