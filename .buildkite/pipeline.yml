@@ -1,13 +1,14 @@
 steps:
- - label: ":detective: Detect affected"
-   key: "detect"
-   command: |
-    echo "web-app" > affected.txt
-   artifact_paths:
-    - affected.txt
+  - label: ":detective: Detect affected"
+    key: "detect"
+    command: |
+      export AFFECTED_PROJECTS="web-app api"
+      buildkite-agent pipeline upload .buildkite/dynamic.yml
+    env:
+      AFFECTED_PROJECTS: ""
 
- - label: ":gear: Generate dynamic pipeline"
-   depends_on: "detect"
-   command: |
-    buildkite-agent artifact download affected.txt .
-    .buildkite/generate-pipeline.sh
+  - label: ":gear: Generate dynamic pipeline"
+    depends_on: "detect"
+    command: .buildkite/generate-pipeline.sh
+    env:
+      AFFECTED_PROJECTS: "${AFFECTED_PROJECTS}"
