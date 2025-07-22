@@ -8,4 +8,6 @@ steps:
 
  - label: ":gear: Generate dynamic pipeline"
    depends_on: "detect"
-   command: .buildkite/generate-pipeline.sh
+   command: |
+    buildkite-agent artifact download affected.txt .
+    .buildkite/generate-pipeline.sh
