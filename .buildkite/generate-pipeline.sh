@@ -1,12 +1,13 @@
 #!/bin/bash
 set -euo pipefail
 
-PIPELINE_FILE=$(mktemp /tmp/pipeline.XXXXX.yml)
-AFFECTED="affected.txt"
+PIPELINE_FILE=$(mktemp /tmp/pipeline.XXXXXX.yml)
 
 echo "steps:" > "$PIPELINE_FILE"
 
-while read -r project; do
+IFS=' ' read -ra PROJECTS <<< "${AFFECTED_PROJECTS:-}"
+
+for project in "${PROJECTS[@]}"; do
   case "$project" in
     web-app)
       echo "  - trigger: \"web-app-pipeline\"" >> "$PIPELINE_FILE"
@@ -20,8 +21,8 @@ while read -r project; do
       echo "  # Skipped unknown project: $project" >> "$PIPELINE_FILE"
       ;;
   esac
-done < "$AFFECTED"
+done
 
-cat "$PIPELINE_FILE"  # for debugging
+cat "$PIPELINE_FILE"
 buildkite-agent pipeline upload "$PIPELINE_FILE"
 
