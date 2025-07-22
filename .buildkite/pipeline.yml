@@ -10,4 +10,4 @@ steps:
    depends_on: "detect"
    command: |
     buildkite-agent artifact download affected.txt .
-    sudo .buildkite/generate-pipeline.sh
+    .buildkite/generate-pipeline.sh
