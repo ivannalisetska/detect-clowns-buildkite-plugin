@@ -15,5 +15,3 @@ steps:
 
       # Ensure buildevents is in PATH or specify full path
       /Users/ivannalisetska/buildevents cmd "$BUILD_ID" "$STEP_ID" "sleep-span" -- sleep 2
-    agents:
-      os: "linux"
