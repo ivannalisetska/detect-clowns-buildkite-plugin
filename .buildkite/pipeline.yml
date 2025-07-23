@@ -7,5 +7,5 @@ steps:
       - export BUILD_ID="bk-$BUILDKITE_BUILD_ID"
 
       # Run a test span
-      - /usr/local/bin/buildevents cmd "$BUILD_ID" "$TRACE_ID" "$PARENT_SPAN_ID" "sleep-span" -- sleep 2
+      - /Users/ivannalisetska/buildevents cmd "$BUILD_ID" "$TRACE_ID" "$PARENT_SPAN_ID" "sleep-span" -- sleep 2
       
