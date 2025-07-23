@@ -1,10 +1,19 @@
 steps:
-  - label: ":microscope: Trace Test"
+  - label: ":microscope: Trace Test with buildevents"
     command: |
       echo "TRACEPARENT: $TRACEPARENT"
+
       export TRACE_ID=$(echo "$TRACEPARENT" | cut -d'-' -f2)
       export PARENT_SPAN_ID=$(echo "$TRACEPARENT" | cut -d'-' -f3)
       export BUILD_ID="bk-$BUILDKITE_BUILD_ID"
+      export STEP_ID="${BUILDKITE_JOB_ID:-manual-step-id}"
 
-      /Users/ivannalisetska/buildevents cmd "$BUILD_ID" "$TRACE_ID" "$PARENT_SPAN_ID" "sleep-span" -- sleep 2
-      
+      echo "BUILD_ID: $BUILD_ID"
+      echo "STEP_ID: $STEP_ID"
+      echo "TRACE_ID: $TRACE_ID"
+      echo "PARENT_SPAN_ID: $PARENT_SPAN_ID"
+
+      # Ensure buildevents is in PATH or specify full path
+      /Users/ivannalisetska/buildevents cmd "$BUILD_ID" "$STEP_ID" "sleep-span" -- sleep 2
+    agents:
+      os: "linux"
