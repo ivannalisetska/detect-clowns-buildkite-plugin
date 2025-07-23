@@ -1,6 +1,6 @@
 env:
  BUILDEVENTS_APIKEY: "hcamk_01k0q4h1t8fys0xvjw3vteb3v4"
- BUILDEVENTS_DATASET: "buildevents"
+ BUILDEVENTS_DATASET: "ci-buildkite"
  
 steps:
   - label: ":microscope: Trace Test with buildevents"
