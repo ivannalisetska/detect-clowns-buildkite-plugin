@@ -1,15 +1,10 @@
-env:
-      AFFECTED_PROJECTS: "web-app api"
-
 steps:
-  - label: ":detective: Detect changes"
-    key: "detect"
-    command: |
-      export AFFECTED_PROJECTS="web-app api"
-    
+  - label: ":microscope: Trace Test"
+    command:
+      - echo "TRACEPARENT: $TRACEPARENT"
+      - export TRACE_ID=$(echo $TRACEPARENT | cut -d'-' -f2)
+      - export PARENT_SPAN_ID=$(echo $TRACEPARENT | cut -d'-' -f3)
+      - export BUILD_ID="bk-$BUILDKITE_BUILD_ID"
 
-  - label: ":gear: Generate dynamic pipeline"
-    depends_on: "detect"
-    command: .buildkite/generate-pipeline.sh
-    env:
-      AFFECTED_PROJECTS: "${AFFECTED_PROJECTS}"
+      # Run a test span
+      - /usr/local/bin/buildevents cmd "$BUILD_ID" "$TRACE_ID" "$PARENT_SPAN_ID" "sleep-span" -- sleep 2
