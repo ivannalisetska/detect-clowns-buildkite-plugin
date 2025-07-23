@@ -4,19 +4,8 @@ env:
  
 steps:
   - label: ":microscope: Trace Test with buildevents"
-    command: |
-    
-      echo "BUILDEVENTS_DATASET: $BUILDEVENTS_DATASET"
-      export BUILDKITE_TRACING_BACKEND=opentelemetry
-      export BUILDKITE_TRACING_PROPAGATE_TRACEPARENT=true
-      
-      export OTEL_EXPORTER_OTLP_HEADERS=x-honeycomb-team=hcamk_01k0q4h1t8fys0xvjw3vteb3v4,x-honeycomb-dataset=ci-buildkite
-      export OTEL_EXPORTER_OTLP_PROTOCOL=grpc
-      
-      echo "BUILDEVENTS_DATASET: $BUILDEVENTS_DATASET"
-      echo "BUILDEVENTS_ENDPOINT: ${BUILDEVENTS_ENDPOINT:-default}"
-
-      # Send test span
+    command: 
+    # Send test span
       /Users/ivannalisetska/buildevents cmd "$BUILD_ID" "$STEP_ID" "sleep-span" -- sleep 2
 
       
