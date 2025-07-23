@@ -1,3 +1,8 @@
+env: 
+BUILDKITE_TRACING_BACKEND="opentelemetry"
+BUILDKITE_TRACING_PROPAGATE_TRACEPARENT="true"
+OTEL_SERVICE_NAME="buildkite-agent"
+OTEL_EXPORTER_OTLP_PROTOCOL="grpc"
 steps:
   - label: ":microscope: Trace Test with buildevents"
     command: 
