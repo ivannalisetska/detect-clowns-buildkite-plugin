@@ -7,9 +7,19 @@ ENV:
  OTEL_EXPORTER_OTLP_PROTOCOL: "grpc"
 
 steps:
-  - label: ":microscope: Trace Test with buildevents"
-    command: 
-    # Send test span
-       /Users/ivannalisetska/buildevents cmd "$BUILD_ID" "$STEP_ID" "sleep-span" -- sleep 2
+  - label: ":link: Test Buildevents Child Span"
+    command: |
+      echo "TRACEPARENT: $TRACEPARENT"
+
+      export TRACE_ID=$(echo "$TRACEPARENT" | cut -d'-' -f2)
+      export PARENT_SPAN_ID=$(echo "$TRACEPARENT" | cut -d'-' -f3)
+
+      echo "TRACE_ID: $TRACE_ID"
+      echo "PARENT_SPAN_ID: $PARENT_SPAN_ID"
+
+      /Users/ivannalisetska/buildevents cmd "$TRACE_ID" "$PARENT_SPAN_ID" "sleep-span" -- sleep 2
+    env:
+      BUILDEVENTS_API_KEY: "<your_honeycomb_api_key>"  # Optional if not pre-set
+      BUILDEVENTS_DATASET: "buildevents"
 
       
