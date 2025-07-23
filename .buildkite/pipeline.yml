@@ -4,8 +4,9 @@ env:
  
 steps:
   - label: ":microscope: Trace Test with buildevents"
-    command: 
-
+    command: |
+    
+      echo "BUILDEVENTS_DATASET: $BUILDEVENTS_DATASET"
       export BUILDKITE_TRACING_BACKEND=opentelemetry
       export BUILDKITE_TRACING_PROPAGATE_TRACEPARENT=true
       
