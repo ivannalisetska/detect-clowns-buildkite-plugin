@@ -1,3 +1,7 @@
+env:
+ BUILDEVENTS_APIKEY: "hcamk_01k0q4h1t8fys0xvjw3vteb3v4"
+ BUILDEVENTS_DATASET: "buildevents"
+ 
 steps:
   - label: ":microscope: Trace Test with buildevents"
     command: |
@@ -5,8 +9,7 @@ steps:
         
       export BUILDKITE_TRACING_BACKEND=opentelemetry
       export BUILDKITE_TRACING_PROPAGATE_TRACEPARENT=true
-      export BUILDEVENTS_APIKEY: "hcamk_01k0q4h1t8fys0xvjw3vteb3v4"
-      export BUILDEVENTS_DATASET: "buildevents"
+      
       export TRACE_ID=$(echo "$TRACEPARENT" | cut -d'-' -f2)
       export PARENT_SPAN_ID=$(echo "$TRACEPARENT" | cut -d'-' -f3)
       export BUILD_ID="bk-$BUILDKITE_BUILD_ID"
