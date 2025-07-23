@@ -8,7 +8,7 @@ env:
 
 steps:
   - label: ":microscope: Trace Test with buildevents"
-    command: |
+    command: 
     # Send test span
       /Users/ivannalisetska/buildevents cmd "$BUILD_ID" "$STEP_ID" "sleep-span" -- sleep 2
 
