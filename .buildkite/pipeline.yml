@@ -9,7 +9,9 @@ steps:
         
       export BUILDKITE_TRACING_BACKEND=opentelemetry
       export BUILDKITE_TRACING_PROPAGATE_TRACEPARENT=true
-      
+      export OTEL_EXPORTER_OTLP_ENDPOINT=https://api.honeycomb.io
+      export OTEL_EXPORTER_OTLP_HEADERS=x-honeycomb-team=hcamk_01k0q4h1t8fys0xvjw3vteb3v4,x-honeycomb-dataset=buildevents
+      export OTEL_EXPORTER_OTLP_PROTOCOL=grpc
       export TRACE_ID=$(echo "$TRACEPARENT" | cut -d'-' -f2)
       export PARENT_SPAN_ID=$(echo "$TRACEPARENT" | cut -d'-' -f3)
       export BUILD_ID="bk-$BUILDKITE_BUILD_ID"
