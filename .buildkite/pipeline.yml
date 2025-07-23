@@ -13,5 +13,12 @@ steps:
       echo "TRACE_ID: $TRACE_ID"
       echo "PARENT_SPAN_ID: $PARENT_SPAN_ID"
 
-      # Ensure buildevents is in PATH or specify full path
-      /Users/ivannalisetska/buildevents cmd "$BUILD_ID" "$STEP_ID" "sleep-span" -- sleep 2
+      echo "BUILDEVENTS_APIKEY: ${BUILDEVENTS_APIKEY:+set}"
+      echo "BUILDEVENTS_DATASET: ${BUILDEVENTS_DATASET}"
+      echo "BUILDEVENTS_ENDPOINT: ${BUILDEVENTS_ENDPOINT:-default}"
+
+      # Send test span
+      /usr/local/bin/buildevents cmd "$BUILD_ID" "$STEP_ID" "sleep-span" -- sleep 2
+    env:
+      BUILDEVENTS_APIKEY: "hcamk_01k0q4h1t8fys0xvjw3vteb3v4"
+      BUILDEVENTS_DATASET: "buildevents"
