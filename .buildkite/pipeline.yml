@@ -6,14 +6,14 @@ env:
 steps:
   - label: ":honeybee: Traced npm --version"
     command: |
-      export BUILDEVENT_BIN="/Users/ivannalisetska/buildevents" \
-      export BUILD_ID="$BUILDKITE_BUILD_ID" \
-      export STEP_ID="$BUILDKITE_JOB_ID" \
-      export SPAN_NAME="npm-version" \
-      export START_TIME=$(date +%s) \
-      echo "--- Running traced command" \
-      "$BUILDEVENT_BIN" cmd "$BUILD_ID" "$STEP_ID" "$SPAN_NAME" -- bash -c "npm --version" \
-      echo "--- Finalizing buildevents span" \
+      export BUILDEVENT_BIN="/Users/ivannalisetska/buildevents" 
+      export BUILD_ID="$BUILDKITE_BUILD_ID" 
+      export STEP_ID="$BUILDKITE_JOB_ID" 
+      export SPAN_NAME="npm-version" 
+      export START_TIME=$(date +%s) 
+      echo "--- Running traced command" 
+      "$BUILDEVENT_BIN" cmd "$BUILD_ID" "$STEP_ID" "$SPAN_NAME" -- bash -c "npm --version" 
+      echo "--- Finalizing buildevents span" 
       "$BUILDEVENT_BIN" step "$BUILD_ID" "$STEP_ID" "$START_TIME" "$SPAN_NAME"
 
       
