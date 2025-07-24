@@ -18,3 +18,4 @@ steps:
     command: >
       /Users/ivannalisetska/buildevents cmd "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "ls-dir" -- bash -c "ls -la";
       /Users/ivannalisetska/buildevents step "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "$(date +%s)" "ls-dir"
+      
