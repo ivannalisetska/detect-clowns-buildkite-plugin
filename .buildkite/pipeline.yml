@@ -4,31 +4,71 @@ env:
   BUILDEVENT_CIPROVIDER: "Buildkite"
 
 steps:
-  - label: ":start: Root span"
-    key: "start"
-    command: |
-      /Users/ivannalisetska/buildevents  build "$BUILDKITE_BUILD_ID" > .trace
-
   - label: ":honeybee: Traced npm version"
-    depends_on: "start"
-    command: >
-      /Users/ivannalisetska/buildevents  cmd "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "npm-version" -- bash -c "npm --version";
-      /Users/ivannalisetska/buildevents  step "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "$(date +%s)" "npm-version"
+    command: |
+      export TRACEPARENT="$BUILDKITE_TRACING_TRACEPARENT"
+      export TRACE_ID=$(echo "$TRACEPARENT" | cut -d'-' -f2)
+      export PARENT_SPAN_ID=$(echo "$TRACEPARENT" | cut -d'-' -f3)
+      export SPAN_ID=$(uuidgen | tr -d '-' | cut -c1-16)
+      export START_TIME=$(date +%s)
+
+      /Users/ivannalisetska/buildevents span \
+        --trace-id "$TRACE_ID" \
+        --span-id "$SPAN_ID" \
+        --parent-id "$PARENT_SPAN_ID" \
+        --start "$START_TIME" \
+        "$BUILDKITE_JOB_ID" \
+        "npm-version"
+
+      npm --version
+
+      /Users/ivannalisetska/buildevents complete \
+        --end "$(date +%s)" \
+        --trace-id "$TRACE_ID" \
+        --span-id "$SPAN_ID"
 
   - label: ":gear: Traced node version"
-    depends_on: "start"
-    command: >
-      /Users/ivannalisetska/buildevents  cmd "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "node-version" -- bash -c "node --version";
-      /Users/ivannalisetska/buildevents  step "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "$(date +%s)" "node-version"
+    command: |
+      export TRACEPARENT="$BUILDKITE_TRACING_TRACEPARENT"
+      export TRACE_ID=$(echo "$TRACEPARENT" | cut -d'-' -f2)
+      export PARENT_SPAN_ID=$(echo "$TRACEPARENT" | cut -d'-' -f3)
+      export SPAN_ID=$(uuidgen | tr -d '-' | cut -c1-16)
+      export START_TIME=$(date +%s)
+
+      /Users/ivannalisetska/buildevents span \
+        --trace-id "$TRACE_ID" \
+        --span-id "$SPAN_ID" \
+        --parent-id "$PARENT_SPAN_ID" \
+        --start "$START_TIME" \
+        "$BUILDKITE_JOB_ID" \
+        "node-version"
+
+      node --version
+
+      /Users/ivannalisetska/buildevents complete \
+        --end "$(date +%s)" \
+        --trace-id "$TRACE_ID" \
+        --span-id "$SPAN_ID"
 
   - label: ":file_folder: Traced ls current directory"
-    depends_on: "start"
-    command: >
-      /Users/ivannalisetska/buildevents  cmd "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "ls-dir" -- bash -c "ls -la";
-      /Users/ivannalisetska/buildevents  step "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "$(date +%s)" "ls-dir"
-
-  - label: ":stop_sign: End trace"
-    depends_on: ["start", "npm-version", "node-version", "ls-dir"]
     command: |
-      /Users/ivannalisetska/buildevents  exit "$BUILDKITE_BUILD_ID" $?
-      
+      export TRACEPARENT="$BUILDKITE_TRACING_TRACEPARENT"
+      export TRACE_ID=$(echo "$TRACEPARENT" | cut -d'-' -f2)
+      export PARENT_SPAN_ID=$(echo "$TRACEPARENT" | cut -d'-' -f3)
+      export SPAN_ID=$(uuidgen | tr -d '-' | cut -c1-16)
+      export START_TIME=$(date +%s)
+
+      /Users/ivannalisetska/buildevents span \
+        --trace-id "$TRACE_ID" \
+        --span-id "$SPAN_ID" \
+        --parent-id "$PARENT_SPAN_ID" \
+        --start "$START_TIME" \
+        "$BUILDKITE_JOB_ID" \
+        "ls-dir"
+
+      ls -la
+
+      /Users/ivannalisetska/buildevents complete \
+        --end "$(date +%s)" \
+        --trace-id "$TRACE_ID" \
+        --span-id "$SPAN_ID"
