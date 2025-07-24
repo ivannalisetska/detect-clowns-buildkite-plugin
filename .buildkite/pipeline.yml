@@ -6,4 +6,4 @@ env:
 steps:
   - label: ":mag: Check TRACEPARENT"
     command:
-      - echo "TRACEPARENT is: \$TRACEPARENT"
+      - echo "TRACEPARENT is: $${TRACEPARENT}"
