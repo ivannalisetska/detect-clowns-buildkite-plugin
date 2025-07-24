@@ -8,6 +8,8 @@ steps:
           - "86"
     command: |
       echo "Patch generated for queue $BUILDKITE_MATRIX_QUEUE" > "s3_engine_diff_${BUILDKITE_MATRIX_QUEUE}.patch"
+      echo "--- Files before upload ---"
+      ls -lh s3_engine_diff_*.patch
       buildkite-agent artifact upload "s3_engine_diff_${BUILDKITE_MATRIX_QUEUE}.patch"
 
   - label: ":mag: Download All Artifacts"
@@ -15,7 +17,7 @@ steps:
     command: |
       buildkite-agent artifact download "s3_engine_diff_*.patch" .
       echo "--- Downloaded files ---"
-      ls -lh s3_engine_diff_*.patch
+      ls -lh s3_engine_diff_*.patch || echo "No patch files found"
       echo "--- File contents ---"
       cat s3_engine_diff_75.patch || echo "Missing s3_engine_diff_75.patch"
       cat s3_engine_diff_86.patch || echo "Missing s3_engine_diff_86.patch"
