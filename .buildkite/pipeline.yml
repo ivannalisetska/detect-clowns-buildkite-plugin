@@ -4,18 +4,31 @@ env:
   BUILDEVENT_CIPROVIDER: "Buildkite"
 
 steps:
+  - label: ":start: Root span"
+    key: "start"
+    command: |
+      /usr/local/bin/buildevents build "$BUILDKITE_BUILD_ID" > .trace
+
   - label: ":honeybee: Traced npm version"
+    depends_on: "start"
     command: >
-      /Users/ivannalisetska/buildevents cmd "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "npm-version" -- bash -c "npm --version";
-      /Users/ivannalisetska/buildevents step "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "$(date +%s)" "npm-version"
+      /usr/local/bin/buildevents cmd "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "npm-version" -- bash -c "npm --version";
+      /usr/local/bin/buildevents step "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "$(date +%s)" "npm-version"
 
   - label: ":gear: Traced node version"
+    depends_on: "start"
     command: >
-      /Users/ivannalisetska/buildevents cmd "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "node-version" -- bash -c "node --version";
-      /Users/ivannalisetska/buildevents step "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "$(date +%s)" "node-version"
+      /usr/local/bin/buildevents cmd "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "node-version" -- bash -c "node --version";
+      /usr/local/bin/buildevents step "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "$(date +%s)" "node-version"
 
   - label: ":file_folder: Traced ls current directory"
+    depends_on: "start"
     command: >
-      /Users/ivannalisetska/buildevents cmd "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "ls-dir" -- bash -c "ls -la";
-      /Users/ivannalisetska/buildevents step "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "$(date +%s)" "ls-dir"
+      /usr/local/bin/buildevents cmd "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "ls-dir" -- bash -c "ls -la";
+      /usr/local/bin/buildevents step "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "$(date +%s)" "ls-dir"
+
+  - label: ":stop_sign: End trace"
+    depends_on: ["start", "npm-version", "node-version", "ls-dir"]
+    command: |
+      /usr/local/bin/buildevents exit "$BUILDKITE_BUILD_ID" $?
       
