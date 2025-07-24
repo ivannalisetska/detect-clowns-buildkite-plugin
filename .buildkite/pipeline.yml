@@ -3,16 +3,16 @@ env:
   BUILDEVENT_DATASET: "buildkite"
   BUILDEVENT_CIPROVIDER: "Buildkite"
 
+
 steps:
-  - label: ":honeybee: Traced Span with Parent Context"
+  - label: ":honeybee: Trace with buildevents"
     commands:
-      - echo "--- Extracting TRACEPARENT"
       - echo "TRACEPARENT: $TRACEPARENT"
       - export TRACE_ID=$(echo "$TRACEPARENT" | cut -d'-' -f2)
       - export PARENT_ID=$(echo "$TRACEPARENT" | cut -d'-' -f3)
-      - export SPAN_NAME="child-npm-version"
+      - export SPAN_NAME="npm-version"
       - export START_TIME=$(date +%s)
-      - echo "--- Running child span with buildevents"
+      - echo "--- Running traced command"
       - $BUILDEVENT_BIN cmd \
           --trace-id "$TRACE_ID" \
           --parent-id "$PARENT_ID" \
