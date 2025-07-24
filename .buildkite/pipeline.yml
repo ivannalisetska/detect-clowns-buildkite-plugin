@@ -7,13 +7,13 @@ steps:
           - "75"
           - "86"
     command: |
-      echo "Matrix value: $$BUILDKITE_MATRIX_QUEUE"
-      echo "Patch generated for queue $$BUILDKITE_MATRIX_QUEUE" > "s3_engine_diff_$${BUILDKITE_MATRIX_QUEUE}.patch"
+      echo "Matrix value: {{matrix.queue}}"
+      echo "Patch generated for queue {{matrix.queue}}" > "s3_engine_diff_{{matrix.queue}}.patch"
       
       echo "--- Files before upload ---"
       ls -lh s3_engine_diff_*.patch
       
-      buildkite-agent artifact upload "s3_engine_diff_$${BUILDKITE_MATRIX_QUEUE}.patch"
+      buildkite-agent artifact upload "s3_engine_diff_{{matrix.queue}}.patch"
 
   - label: ":mag: Download All Artifacts"
     depends_on: "diff-job"
