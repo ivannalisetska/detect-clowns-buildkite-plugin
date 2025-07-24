@@ -1,74 +1,21 @@
-env:
-  BUILDEVENT_APIKEY: "kL18jQD3CEi4a4kbfofa9F"
-  BUILDEVENT_DATASET: "buildkite"
-  BUILDEVENT_CIPROVIDER: "Buildkite"
-
 steps:
-  - label: ":honeybee: Traced npm version"
+  - label: "Generate Diff - {{matrix.queue}}"
+    key: "diff-job"
+    matrix:
+      setup:
+        queue:
+          - "75"
+          - "86"
     command: |
-      export TRACEPARENT="$BUILDKITE_TRACING_TRACEPARENT"
-      export TRACE_ID=$(echo "$TRACEPARENT" | cut -d'-' -f2)
-      export PARENT_SPAN_ID=$(echo "$TRACEPARENT" | cut -d'-' -f3)
-      export SPAN_ID=$(uuidgen | tr -d '-' | cut -c1-16)
-      export START_TIME=$(date +%s)
+      echo "Patch generated for queue $BUILDKITE_MATRIX_QUEUE" > "s3_engine_diff_${BUILDKITE_MATRIX_QUEUE}.patch"
+      buildkite-agent artifact upload "s3_engine_diff_${BUILDKITE_MATRIX_QUEUE}.patch"
 
-      /Users/ivannalisetska/buildevents span \
-        --trace-id "$TRACE_ID" \
-        --span-id "$SPAN_ID" \
-        --parent-id "$PARENT_SPAN_ID" \
-        --start "$START_TIME" \
-        "$BUILDKITE_JOB_ID" \
-        "npm-version"
-
-      npm --version
-
-      /Users/ivannalisetska/buildevents complete \
-        --end "$(date +%s)" \
-        --trace-id "$TRACE_ID" \
-        --span-id "$SPAN_ID"
-
-  - label: ":gear: Traced node version"
+  - label: ":mag: Download All Artifacts"
+    depends_on: "diff-job"
     command: |
-      export TRACEPARENT="$BUILDKITE_TRACING_TRACEPARENT"
-      export TRACE_ID=$(echo "$TRACEPARENT" | cut -d'-' -f2)
-      export PARENT_SPAN_ID=$(echo "$TRACEPARENT" | cut -d'-' -f3)
-      export SPAN_ID=$(uuidgen | tr -d '-' | cut -c1-16)
-      export START_TIME=$(date +%s)
-
-      /Users/ivannalisetska/buildevents span \
-        --trace-id "$TRACE_ID" \
-        --span-id "$SPAN_ID" \
-        --parent-id "$PARENT_SPAN_ID" \
-        --start "$START_TIME" \
-        "$BUILDKITE_JOB_ID" \
-        "node-version"
-
-      node --version
-
-      /Users/ivannalisetska/buildevents complete \
-        --end "$(date +%s)" \
-        --trace-id "$TRACE_ID" \
-        --span-id "$SPAN_ID"
-
-  - label: ":file_folder: Traced ls current directory"
-    command: |
-      export TRACEPARENT="$BUILDKITE_TRACING_TRACEPARENT"
-      export TRACE_ID=$(echo "$TRACEPARENT" | cut -d'-' -f2)
-      export PARENT_SPAN_ID=$(echo "$TRACEPARENT" | cut -d'-' -f3)
-      export SPAN_ID=$(uuidgen | tr -d '-' | cut -c1-16)
-      export START_TIME=$(date +%s)
-
-      /Users/ivannalisetska/buildevents span \
-        --trace-id "$TRACE_ID" \
-        --span-id "$SPAN_ID" \
-        --parent-id "$PARENT_SPAN_ID" \
-        --start "$START_TIME" \
-        "$BUILDKITE_JOB_ID" \
-        "ls-dir"
-
-      ls -la
-
-      /Users/ivannalisetska/buildevents complete \
-        --end "$(date +%s)" \
-        --trace-id "$TRACE_ID" \
-        --span-id "$SPAN_ID"
+      buildkite-agent artifact download "s3_engine_diff_*.patch" .
+      echo "--- Downloaded files ---"
+      ls -lh s3_engine_diff_*.patch
+      echo "--- File contents ---"
+      cat s3_engine_diff_75.patch || echo "Missing s3_engine_diff_75.patch"
+      cat s3_engine_diff_86.patch || echo "Missing s3_engine_diff_86.patch"
