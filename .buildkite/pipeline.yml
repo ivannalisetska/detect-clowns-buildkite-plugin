@@ -6,4 +6,4 @@ env:
 steps:
   - label: ":mag: Check TRACEPARENT"
     command:
-      - echo "TRACEPARENT is: $${BUILDKITE_TRACING_PROPAGATE_TRACEPARENT}"
+       - echo "TRACEPARENT is: $BUILDKITE_TRACING_PROPAGATE_TRACEPARENT"
