@@ -4,6 +4,7 @@ env:
   BUILDEVENT_CIPROVIDER: "Buildkite"
 
 steps:
-  - label: ":mag: Check TRACEPARENT"
-    command:
-       - echo "TRACEPARENT is: $$BUILDKITE_TRACING_PROPAGATE_TRACEPARENT"
+  - label: ":honeybee: Traced npm version"
+    command: >
+      /Users/ivannalisetska/buildevents cmd "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "npm-version" -- bash -c "npm --version";
+      /Users/ivannalisetska/buildevents step "$BUILDKITE_BUILD_ID" "$BUILDKITE_JOB_ID" "$(date +%s)" "npm-version"
