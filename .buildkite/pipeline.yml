@@ -4,6 +4,5 @@ env:
   BUILDEVENT_CIPROVIDER: "Buildkite"
 
 steps:
-  - label: ":microscope: Check TRACEPARENT"
-    command:
-      - echo "TRACEPARENT is: $TRACEPARENT"
+  - label: ":mag: Check TRACEPARENT"
+    command: echo "TRACEPARENT is: $TRACEPARENT"
