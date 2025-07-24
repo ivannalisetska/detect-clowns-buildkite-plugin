@@ -1,26 +1,19 @@
-ENV: 
- BUILDKITE_TRACING_SERVICE_NAME: "buildkite"
- OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team=c93bx72yva2ek6dgs8032qnq4zvrn3p3"
- BUILDEVENTS_DATASET: "buildevents"
- BUILDKITE_TRACING_BACKEND: "opentelemetry"
- BUILDKITE_TRACING_PROPAGATE_TRACEPARENT: "true"
- OTEL_SERVICE_NAME: "buildkite-agent"
- OTEL_EXPORTER_OTLP_PROTOCOL: "grpc"
+env:
+  BUILDEVENT_APIKEY: "kL18jQD3CEi4a4kbfofa9F"
+  BUILDEVENT_DATASET: "buildkite"
+  BUILDEVENT_CIPROVIDER: "Buildkite"
 
 steps:
-  - label: ":link: Test Buildevents Child Span"
-    command: |
-      echo "TRACEPARENT: $TRACEPARENT"
-
-      export TRACE_ID=$(echo "$TRACEPARENT" | cut -d'-' -f2)
-      export PARENT_SPAN_ID=$(echo "$TRACEPARENT" | cut -d'-' -f3)
-
-      echo "TRACE_ID: $TRACE_ID"
-      echo "PARENT_SPAN_ID: $PARENT_SPAN_ID"
-
-      /Users/ivannalisetska/buildevents cmd "$TRACE_ID" "$PARENT_SPAN_ID" "sleep-span" -- sleep 2
-    env:
-      BUILDEVENTS_API_KEY: "c93bx72yva2ek6dgs8032qnq4zvrn3p3"  # Optional if not pre-set
-      BUILDEVENTS_DATASET: "buildevents"
+  - label: ":honeybee: Traced npm --version"
+    command: >
+      export BUILDEVENT_BIN="/Users/ivannalisetska/buildevents" &&
+      export BUILD_ID="$BUILDKITE_BUILD_ID" &&
+      export STEP_ID="$BUILDKITE_JOB_ID" &&
+      export SPAN_NAME="npm-version" &&
+      export START_TIME=$(date +%s) &&
+      echo "--- Running traced command" &&
+      "$BUILDEVENT_BIN" cmd "$BUILD_ID" "$STEP_ID" "$SPAN_NAME" -- bash -c "npm --version" &&
+      echo "--- Finalizing buildevents span" &&
+      "$BUILDEVENT_BIN" step "$BUILD_ID" "$STEP_ID" "$START_TIME" "$SPAN_NAME"
 
       
