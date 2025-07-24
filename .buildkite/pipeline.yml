@@ -4,6 +4,6 @@ env:
   BUILDEVENT_CIPROVIDER: "Buildkite"
 
 steps:
-  - label: ":mag: Echo TRACEPARENT"
+  - label: ":mag: Check TRACEPARENT"
     command:
-      - echo "TRACEPARENT: ${TRACING_PROPAGATE_TRACEPARENT}"
+      - echo "TRACEPARENT is: ${BUILDKITE_TRACING_PROPAGATE_TRACEPARENT}"
