@@ -15,5 +15,3 @@ steps:
       "$BUILDEVENT_BIN" cmd "$BUILD_ID" "$STEP_ID" "$SPAN_NAME" -- bash -c "npm --version" 
       echo "--- Finalizing buildevents span" 
       "$BUILDEVENT_BIN" step "$BUILD_ID" "$STEP_ID" "$START_TIME" "$SPAN_NAME"
-
-      
