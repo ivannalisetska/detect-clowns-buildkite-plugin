@@ -6,4 +6,4 @@ env:
 steps:
   - label: ":mag: Echo TRACEPARENT"
     command:
-      - echo "TRACEPARENT: $TRACING_PROPAGATE_TRACEPARENT"
+      - echo "TRACEPARENT: ${TRACING_PROPAGATE_TRACEPARENT}"
