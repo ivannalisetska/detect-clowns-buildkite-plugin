@@ -1,20 +1,18 @@
-env:
-  GLOBAL_VAR: "global-value"
-  BUILDKITE_ARTIFACT_UPLOAD_DESTINATION: "s3://your-bucket/path"
-
 steps:
   - label: "Environment check"
+    env:
+      GLOBAL_VAR: "global-value"
     command: "echo $GLOBAL_VAR"
     agents:
       queue: runners
-    
+
   - label: "Normal step"
     command: "echo 'This should work fine'"
     agents:
       queue: runners
-      
+
   - label: "Concurrency step"
-    command: "echo 'This step will fail signature verification'"
+    command: "echo 'This step should now pass signature verification'"
     concurrency: 1
     concurrency_group: "test-group"
     agents:
