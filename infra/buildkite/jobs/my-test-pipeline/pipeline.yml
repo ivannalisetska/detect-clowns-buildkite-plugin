@@ -1,7 +1,7 @@
 steps:
-  - label: ":test_tube: Run Tests"
+  - label: ":test-tube: Run Tests"
     command: "echo 'Running tests for my-test-pipeline'"
     
   - label: ":package: Build Package"
     command: "echo 'Building package for my-test-pipeline'"
-    depends_on: "Run Tests"
+
