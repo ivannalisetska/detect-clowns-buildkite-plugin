@@ -1,0 +1,7 @@
+steps:
+  - label: ":rocket: Deploy"
+    command: "echo 'Deploying from my-deploy-pipeline'"
+    
+  - label: ":white_check_mark: Verify Deployment"
+    command: "echo 'Verifying deployment from my-deploy-pipeline'"
+    depends_on: "Deploy"
