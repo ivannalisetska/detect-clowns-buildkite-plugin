@@ -1,5 +1,4 @@
 steps:
-
   - label: ":mag: Debug Environment Variables"
   command: |
     echo "=== Environment Variables ==="
