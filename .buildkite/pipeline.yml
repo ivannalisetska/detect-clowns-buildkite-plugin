@@ -1,13 +1,13 @@
 steps:
   - label: ":mag: Debug Environment Variables"
-  command: |
-    echo "=== Environment Variables ==="
-    echo "BUILDKITE_GIT_DIFF_BASE: '${BUILDKITE_GIT_DIFF_BASE:-NOT SET}'"
-    echo "BUILDKITE_MERGE_QUEUE_BASE_BRANCH: '${BUILDKITE_MERGE_QUEUE_BASE_BRANCH:-NOT SET}'"
-    echo "BUILDKITE_MERGE_QUEUE_BASE_COMMIT: '${BUILDKITE_MERGE_QUEUE_BASE_COMMIT:-NOT SET}'"
-    echo "BUILDKITE_PULL_REQUEST_BASE_BRANCH: '${BUILDKITE_PULL_REQUEST_BASE_BRANCH:-NOT SET}'"
-    echo "Build branch: $BUILDKITE_BRANCH"
-    echo "Build source: $BUILDKITE_SOURCE"
+    command: |
+      echo "=== Environment Variables ==="
+      echo "BUILDKITE_GIT_DIFF_BASE: '${BUILDKITE_GIT_DIFF_BASE:-NOT SET}'"
+      echo "BUILDKITE_MERGE_QUEUE_BASE_BRANCH: '${BUILDKITE_MERGE_QUEUE_BASE_BRANCH:-NOT SET}'"
+      echo "BUILDKITE_MERGE_QUEUE_BASE_COMMIT: '${BUILDKITE_MERGE_QUEUE_BASE_COMMIT:-NOT SET}'"
+      echo "BUILDKITE_PULL_REQUEST_BASE_BRANCH: '${BUILDKITE_PULL_REQUEST_BASE_BRANCH:-NOT SET}'"
+      echo "Build branch: $BUILDKITE_BRANCH"
+      echo "Build source: $BUILDKITE_SOURCE"
     
   - label: ":gear: Setup"
     command: echo "Setting up test environment"
