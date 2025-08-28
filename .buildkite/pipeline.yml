@@ -6,25 +6,20 @@ steps:
   - label: ":test_tube: Test if_changed - Frontend"
     command: |
       echo "Running frontend tests"
-      echo "Files changed in frontend: $(git diff --name-only \$BUILDKITE_GIT_DIFF_BASE HEAD | grep '^frontend/' || echo 'none')"
+      echo "Files changed in frontend: $(git diff --name-only $BUILDKITE_GIT_DIFF_BASE HEAD | grep '^frontend/' || echo 'none')"
     if_changed: "frontend/**"
     depends_on: setup
 
   - label: ":test_tube: Test if_changed - Backend"
     command: |
       echo "Running backend tests"
-      echo "Files changed in backend: $(git diff --name-only \$BUILDKITE_GIT_DIFF_BASE HEAD | grep '^backend/' || echo 'none')"
+      echo "Files changed in backend: $(git diff --name-only $BUILDKITE_GIT_DIFF_BASE HEAD | grep '^backend/' || echo 'none')"
     if_changed: "backend/**"
     depends_on: setup
 
   - label: ":package: Build if any code changed"
     command: |
       echo "Building application"
-      echo "BUILDKITE_GIT_DIFF_BASE is set to: \$BUILDKITE_GIT_DIFF_BASE"
-    if_changed:
-      - "frontend/**"
-      - "backend/**"
-      - "shared/**"
-    depends_on:
-      - setup
-
+      echo "BUILDKITE_GIT_DIFF_BASE is set to: $BUILDKITE_GIT_DIFF_BASE"
+    if_changed: "frontend/**;backend/**;shared/**"
+    depends_on: setup
