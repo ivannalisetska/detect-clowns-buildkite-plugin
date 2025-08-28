@@ -1,28 +1,30 @@
-#!/bin/bash
-set -euo pipefail
+steps:
+  - label: ":gear: Setup"
+    command: echo "Setting up test environment"
+    key: setup
 
-PIPELINE_FILE=$(mktemp /tmp/pipeline.YX.yml)
+  - label: ":test_tube: Test if_changed - Frontend"
+    command: |
+      echo "Running frontend tests"
+      echo "Files changed in frontend: $(git diff --name-only \$BUILDKITE_GIT_DIFF_BASE HEAD | grep '^frontend/' || echo 'none')"
+    if_changed: "frontend/**"
+    depends_on: setup
 
-echo "steps:" > "$PIPELINE_FILE"
+  - label: ":test_tube: Test if_changed - Backend"
+    command: |
+      echo "Running backend tests"
+      echo "Files changed in backend: $(git diff --name-only \$BUILDKITE_GIT_DIFF_BASE HEAD | grep '^backend/' || echo 'none')"
+    if_changed: "backend/**"
+    depends_on: setup
 
-IFS=' ' read -ra PROJECTS <<< "${AFFECTED_PROJECTS:-}"
-
-for project in "${PROJECTS[@]}"; do
-  case "$project" in
-    web-app)
-      echo "  - trigger: \"web-app-pipeline\"" >> "$PIPELINE_FILE"
-      echo "    label: \":rocket: Trigger Web App\"" >> "$PIPELINE_FILE"
-      ;;
-    api)
-      echo "  - trigger: \"api-pipeline\"" >> "$PIPELINE_FILE"
-      echo "    label: \":rocket: Trigger API\"" >> "$PIPELINE_FILE"
-      ;;
-    *)
-      echo "  # Skipped unknown project: $project" >> "$PIPELINE_FILE"
-      ;;
-  esac
-done
-
-cat "$PIPELINE_FILE"
-buildkite-agent pipeline upload "$PIPELINE_FILE"
+  - label: ":package: Build if any code changed"
+    command: |
+      echo "Building application"
+      echo "BUILDKITE_GIT_DIFF_BASE is set to: \$BUILDKITE_GIT_DIFF_BASE"
+    if_changed:
+      - "frontend/**"
+      - "backend/**"
+      - "shared/**"
+    depends_on:
+      - setup
 
